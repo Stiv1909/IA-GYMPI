@@ -1,0 +1,10 @@
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.exe
+*.spec
+build/
+dist/
+gympi_data.json
