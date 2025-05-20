@@ -1,3 +1,4 @@
+import sys
 import json
 import os
 import winsound
@@ -7,6 +8,11 @@ import tkinter as tk
 import ttkbootstrap as ttk
 from ia import (inicializar_modelo, generar_rutina, ajustar_rutina_actual,
                 registrar_seguimiento, analizar_historial, generar_grafica)
+
+def ruta_recurso(nombre):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, nombre)
+    return nombre
 
 # Variables globales
 modelo = inicializar_modelo()
@@ -88,7 +94,7 @@ def enviar_mensaje(texto, emisor="bot", delay=10):
 
         # Mostrar ícono/avatar del bot
         if emisor == "bot":
-            icono = Image.open("bot.png").resize((24, 24))
+            icono = Image.open(ruta_recurso("bot.png")).resize((24, 24))
             icono_tk = ImageTk.PhotoImage(icono)
             label_icono = tk.Label(contenedor_exterior, image=icono_tk, bg="#1a1a1a")
             label_icono.image = icono_tk
