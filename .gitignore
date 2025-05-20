@@ -3,8 +3,10 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.exe
 *.spec
 build/
-dist/
+# dist/ excluido excepto el .exe
+dist/*.*
+!dist/gympi.exe
 gympi_data.json
+
