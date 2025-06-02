@@ -1,12 +1,16 @@
-
+# Archivos temporales de Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# Archivos de compilación
 *.spec
 build/
-# dist/ excluido excepto el .exe
-dist/*.*
-!dist/gympi.exe
+dist/
+dist/gympi.exe
+
+# Datos locales (si no quieres subirlo)
 gympi_data.json
+
 
