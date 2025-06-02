@@ -12,6 +12,19 @@ catalogo = [
     "Zancadas", "Dominadas", "Mountain Climbers", "Abdominales", "Press Militar"
 ]
 
+enlaces_youtube = {
+    "Sentadillas": "https://www.youtube.com/shorts/cqoNTr02fRk",
+    "Burpees": "https://www.youtube.com/watch?v=awbFx6HqWns",
+    "Plancha": "https://www.youtube.com/shorts/S9_mGViO2cc",
+    "Flexiones": "https://www.youtube.com/shorts/9I9zGsQ8yNg",
+    "Peso muerto": "https://www.youtube.com/watch?v=0XL4cZR2Ink",
+    "Zancadas": "https://www.youtube.com/watch?v=Xcfs_3DMKlc",
+    "Dominadas": "https://www.youtube.com/shorts/9S2yWQVeQJ8",
+    "Mountain Climbers": "https://www.youtube.com/shorts/jIzWec7cSyc",
+    "Abdominales": "https://www.youtube.com/shorts/_KOqmnPH8xE",
+    "Press Militar": "https://www.youtube.com/shorts/PWtkHROaH3Y"
+}
+
 # ==========================
 # Inicializar el modelo
 # ==========================
@@ -42,8 +55,12 @@ def configurar_ejercicio(nombre_ejercicio, experiencia, peso):
     else:
         repeticiones = 12
         series = 4
-    return {"nombre": nombre_ejercicio, "repeticiones": repeticiones, "series": series}
-
+    return {
+        "nombre": nombre_ejercicio,
+        "repeticiones": repeticiones,
+        "series": series,
+        "enlace": enlaces_youtube.get(nombre_ejercicio, "")
+    }
 # ==========================
 # Generar rutina inicial
 # ==========================
@@ -125,7 +142,7 @@ def registrar_seguimiento(historial, semana, dias, minutos_dia, ejercicios_reali
 
 def analizar_historial(historial, altura, objetivo):
     if len(historial) < 2:
-        return "➖ Aún no hay suficiente información para analizar el progreso."
+        return "➖ Aún nos falta una semana para analizar tu progreso, ánimo lo estas logrando."
 
     progreso_texto = ""
     peso_inicial = historial[0]['peso']

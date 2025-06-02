@@ -1,3 +1,4 @@
+import webbrowser
 import sys
 import json
 import os
@@ -92,7 +93,6 @@ def enviar_mensaje(texto, emisor="bot", delay=10):
             pady=7
         )
 
-        # Mostrar ícono/avatar del bot
         if emisor == "bot":
             icono = Image.open(ruta_recurso("bot.png")).resize((24, 24))
             icono_tk = ImageTk.PhotoImage(icono)
@@ -102,6 +102,7 @@ def enviar_mensaje(texto, emisor="bot", delay=10):
 
         contenedor_burbuja.pack(anchor="w" if emisor == "bot" else "e", padx=10)
 
+        # Crear el label vacío
         texto_label = tk.Label(
             contenedor_burbuja,
             text="",
@@ -112,10 +113,16 @@ def enviar_mensaje(texto, emisor="bot", delay=10):
             justify="left"
         )
         texto_label.pack()
+        label_dinamico = texto_label
+
+        # Si es un enlace puro, hacerlo clickeable y azul subrayado
+        if emisor == "bot" and texto.strip().startswith("https://"):
+            texto_label.bind("<Button-1>", lambda e: webbrowser.open(texto.strip()))
+            texto_label.config(cursor="hand2", fg="lightblue", font=("Segoe UI", 10, "underline"))
 
         def escribir_caracter_por_caracter(indice=0):
             if indice <= len(texto):
-                texto_label.config(text=texto[:indice])
+                label_dinamico.config(text=texto[:indice])
                 app.update_idletasks()
                 canvas.yview_moveto(1)
                 contenedor_burbuja.after(delay, escribir_caracter_por_caracter, indice + 1)
@@ -126,7 +133,7 @@ def enviar_mensaje(texto, emisor="bot", delay=10):
         if emisor == "bot":
             escribir_caracter_por_caracter()
         else:
-            texto_label.config(text=texto)
+            label_dinamico.config(text=texto)
             app.update_idletasks()
             canvas.yview_moveto(1)
             winsound.PlaySound('SystemAsterisk', winsound.SND_ALIAS)
@@ -222,9 +229,14 @@ def generar_rutina_inicial():
 def mostrar_rutina():
     enviar_mensaje(f"🏋️‍♂️ Rutina Semana {semana_actual}:")
     for ejercicio in rutina_actual:
-        texto = f"- {ejercicio['nombre']}: {ejercicio['repeticiones']} repeticiones x {ejercicio['series']} series"
-        enviar_mensaje(texto)
+        mensaje = f"- {ejercicio['nombre']}: {ejercicio['repeticiones']} repeticiones x {ejercicio['series']} series"
+        enviar_mensaje(mensaje)
+
+        if ejercicio.get("enlace"):
+            enlace = ejercicio['enlace']
+            enviar_mensaje(enlace)  # Solo el link como mensaje aparte para detectar correctamente
     guardar_datos()
+
 
 def mostrar_boton_siguiente():
     global modo_seguimiento
@@ -265,6 +277,7 @@ def capturar_cansancio(valor):
 
     enviar_mensaje("¿Cuántos días entrenaste esta semana? (1 a 7)")
     pedir_input(capturar_dias_entrenados)
+
 def capturar_dias_entrenados(valor):
     global dias_entrenados_temp
     enviar_mensaje(valor, emisor="user")
